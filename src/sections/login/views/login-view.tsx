@@ -13,9 +13,13 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
-import {styled} from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
+import { useAuth } from '@/context/AuthContext';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-const Card = styled(MuiCard)(({theme}) => ({
+const Card = styled(MuiCard)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     alignSelf: 'center',
@@ -34,7 +38,7 @@ const Card = styled(MuiCard)(({theme}) => ({
     }),
 }));
 
-const SignInContainer = styled(Stack)(({theme}) => ({
+const SignInContainer = styled(Stack)(({ theme }) => ({
     height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
     minHeight: '100%',
     padding: theme.spacing(2),
@@ -57,24 +61,36 @@ const SignInContainer = styled(Stack)(({theme}) => ({
     },
 }));
 
+
+const schema = yup.object({
+    email: yup.string().email('Invalid email format').required('Email is required'),
+    password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+}).required();
+
 export default function SignIn() {
+
+    const { login } = useAuth();
+    const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) });
+
+    const onSubmit = (data: any) => login(data.email, data.password);
 
     return (
         <>
-            <CssBaseline enableColorScheme/>
+            <CssBaseline enableColorScheme />
             <SignInContainer direction="column" justifyContent="space-between">
                 <Card variant="outlined">
                     <Typography
                         component="h1"
                         variant="h4"
-                        sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}
+                        sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
                     >
                         Sign in
                     </Typography>
                     <Box
                         component="form"
-                        onSubmit={() => {
-                        }}
+                        onSubmit={
+                            handleSubmit(onSubmit)
+                        }
                         noValidate
                         sx={{
                             display: 'flex',
@@ -86,6 +102,7 @@ export default function SignIn() {
                         <FormControl>
                             <FormLabel htmlFor="email">Email</FormLabel>
                             <TextField
+                                {...register('email')}
                                 type="email"
                                 name="email"
                                 placeholder="your@email.com"
@@ -95,12 +112,15 @@ export default function SignIn() {
                                 fullWidth
                                 variant="outlined"
                                 size="small"
-                                sx={{mt: 1}}
+                                sx={{ mt: 1 }}
+                                error={!!errors.email}
+                                helperText={errors.email?.message}
                             />
                         </FormControl>
                         <FormControl>
                             <FormLabel htmlFor="password">Password</FormLabel>
                             <TextField
+                                {...register('password')}
                                 name="password"
                                 placeholder="••••••"
                                 type="password"
@@ -110,29 +130,31 @@ export default function SignIn() {
                                 fullWidth
                                 variant="outlined"
                                 size="small"
-                                sx={{mt: 1}}
+                                sx={{ mt: 1 }}
+                                error={!!errors.password}
+                                helperText={errors.password?.message}
                             />
                         </FormControl>
                         <FormControlLabel
-                            control={<Checkbox value="remember" color="primary"/>}
+                            control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
                         />
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
-                            onClick={() => {
-                            }}
+                        // onClick={() => {
+                        // }}
                         >
                             Sign in
                         </Button>
                         <Link
                             component="button"
                             type="button"
-                            onClick={() => {
-                            }}
+                            // onClick={() => {
+                            // }}
                             variant="body2"
-                            sx={{alignSelf: 'center'}}
+                            sx={{ alignSelf: 'center' }}
                         >
                             Forgot your password?
                         </Link>
