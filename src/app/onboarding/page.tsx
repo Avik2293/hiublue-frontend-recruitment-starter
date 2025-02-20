@@ -1,10 +1,9 @@
-import OnboardingView from "@/sections/onboarding/views/onboarding-view";
+import OnboardingClient from "../../sections/onboarding/onboarding";
 
 export const metadata = {
     title: 'Onboarding',
 };
 
-
 export default function Page() {
-    return <OnboardingView/>;
+    return <OnboardingClient />;
 }
