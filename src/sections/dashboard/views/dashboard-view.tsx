@@ -6,6 +6,7 @@ import { Box, FormControl, Grid, MenuItem, Select, SelectChangeEvent, Typography
 import { InfoCard } from './infoCard';
 import OfferListTable from './table';
 import ApexChart from './webcharts';
+import { useAuth } from '@/context/AuthContext';
 
 interface DashboardData {
   current: {
@@ -53,6 +54,8 @@ export default function DashboardView() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('this-week');
 
+  const { token } = useAuth();
+
   // fo week change
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSearchQuery(event.target.value as string);
@@ -67,7 +70,7 @@ export default function DashboardView() {
           `https://dummy-1.hiublue.com/api/dashboard/summary?filter=${searchQuery}`,
           {
             headers: {
-              Authorization: 'Bearer fake-jwt-token',
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -78,7 +81,7 @@ export default function DashboardView() {
           `https://dummy-1.hiublue.com/api/dashboard/stat?filter=${searchQuery}`,
           {
             headers: {
-              Authorization: 'Bearer fake-jwt-token',
+              Authorization: `Bearer ${token}`,
             },
           }
         );

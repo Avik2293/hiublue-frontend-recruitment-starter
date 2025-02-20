@@ -59,14 +59,15 @@ const ApexChart: React.FC<ChartProps> = ({ title, type, categories, series }) =>
                 // offsetY: 0
             },
         },
-        // plotOptions: {
-        //     bar: {
-        //         dataLabels: {
-        //             position: "top", // Moves text to upper side
-        //         },
-        //         columnWidth: "50%", // Adjusts width for better alignment
-        //     },
-        // },
+        plotOptions: {
+            bar: {
+                //         dataLabels: {
+                //             position: "top", // Moves text to upper side
+                //         },
+                columnWidth: "50%",
+                borderRadius: 4
+            },
+        },
         colors: [type === "line" ? "#1C252E" : "#007867", "#FFAB00"],
         responsive: [
             {

@@ -27,6 +27,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 
 
 interface TableData {
@@ -70,6 +71,8 @@ const OfferListTable: React.FC = () => {
     const [typeFilter, setTypeFilter] = useState("All");
     const [statusFilter, setStatusFilter] = useState("All");
 
+    const { token } = useAuth();
+
     // get data
     useEffect(() => {
         const fetchData = async () => {
@@ -78,7 +81,7 @@ const OfferListTable: React.FC = () => {
                     `https://dummy-1.hiublue.com/api/offers?page=${page + 1}&per_page=${rowsPerPage}`,
                     {
                         headers: {
-                            Authorization: 'Bearer fake-jwt-token',
+                            Authorization: `Bearer ${token}`,
                         },
                     }
                 );
